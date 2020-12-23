@@ -1,22 +1,16 @@
 import { useCallback } from "react";
 import { Form, Field } from "react-final-form";
 import { useRouter } from "next/router";
+import { createPost } from "@/pages/api/createPost";
 
 export function PostForm() {
   const router = useRouter();
   const onSubmit = useCallback(async (formData) => {
-    const res = await fetch("/api/createPost", {
-      method: "POST",
-      body: JSON.stringify(formData),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const json = await res.json();
-    if (json.ok) {
+    const data = await createPost(formData);
+    if (data.ok) {
       router.push("/");
     } else {
-      alert(JSON.stringify(json));
+      alert(JSON.stringify(data));
     }
   }, []);
   return (
